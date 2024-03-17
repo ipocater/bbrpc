@@ -6,9 +6,7 @@
         <groupId>com.ipoca</groupId>
         <artifactId>bbrpc</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.ipoca</groupId>
     <artifactId>bbrpc-demo-provider</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>bbrpc-demo-provider</name>

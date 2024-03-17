@@ -22,6 +22,7 @@
         <module>bbrpc-core</module>
         <module>bbrpc-demo-api</module>
         <module>bbrpc-demo-provider</module>
+        <module>bbrpc-demo-consumer</module>
     </modules>
 
 

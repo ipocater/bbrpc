@@ -15,4 +15,15 @@ public class UserServiceImpl implements UserService {
         return new User(id, "bb-" + System.currentTimeMillis());
     }
 
+    @Override
+    public int getId(int id) {
+        return id;
+    }
+
+    @Override
+    public String getName() {
+        return "bb123";
+    }
+
+
 }

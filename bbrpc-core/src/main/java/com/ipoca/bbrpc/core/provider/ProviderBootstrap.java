@@ -5,7 +5,6 @@ import com.ipoca.bbrpc.core.api.RpcRequest;
 import com.ipoca.bbrpc.core.api.RpcResponse;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -43,16 +42,25 @@ public class ProviderBootstrap implements ApplicationContextAware {
 
     public RpcResponse invokeRequest(RpcRequest request) {
 
+        String methodName= request.getMethod();
+        if (methodName.equals("toString") || methodName.equals("hashCode")){
+            return null;
+        }
+
+        RpcResponse rpcResponse = new RpcResponse();
         Object bean = skeleton.get(request.getService());
         try {
             Method method = findMethod(bean.getClass(),request.getMethod());
             Object result = method.invoke(bean, request.getArgs());
-            return new RpcResponse(true, result);
+            rpcResponse.setStatus(true);
+            rpcResponse.setData(result);
+            return rpcResponse;
         } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
+            rpcResponse.setEx(new RuntimeException(e.getTargetException().getMessage()));
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
+        return rpcResponse;
     }
 
     private Method findMethod(Class<?> aClass, String methodName) {
