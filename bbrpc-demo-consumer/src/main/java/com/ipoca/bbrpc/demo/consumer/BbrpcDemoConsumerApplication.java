@@ -32,13 +32,19 @@ public class BbrpcDemoConsumerApplication {
     @Bean
     public ApplicationRunner consumer_runner(){
         return x -> {
-//            User user = userService.findById(1);
-//            System.out.println("RPC result userService.findByid(1) " + user);
+            User user = userService.findById(1);
+            System.out.println("RPC result userService.findByid(1) " + user);
+
+            User user1 = userService.findById(1,"xubang");
+            System.out.println("RPC result userService.findByid(1,xubang) " + user1);
 
 //            Order order = orderService.findById(404);
 //            System.out.println("RPC result orderService.findByid(404) " + order);
 
             System.out.println(userService.getName());
+
+            System.out.println(userService.getName(123));
+
         };
     }
 

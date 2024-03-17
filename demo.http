@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "service": "com.ipoca.bbrpc.demo.api.UserService",
-  "method": "findById",
+  "methodSign": "findById@1_int",
   "args": [100]
 }
 
@@ -14,9 +14,9 @@ POST http://localhost:8080/
 Content-Type: application/json
 
 {
-  "service": "com.ipoca.bbrpc.demo.api.OrderService",
-  "method": "findById",
-  "args": [200]
+  "service": "com.ipoca.bbrpc.demo.api.UserService",
+  "methodSign": "findById@2_int_java.lang.String",
+  "args": [200,"bb"]
 }
 
 ### mock

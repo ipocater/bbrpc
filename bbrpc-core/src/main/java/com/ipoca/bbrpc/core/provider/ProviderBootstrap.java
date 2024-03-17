@@ -3,15 +3,20 @@ package com.ipoca.bbrpc.core.provider;
 import com.ipoca.bbrpc.core.annotation.BBProvider;
 import com.ipoca.bbrpc.core.api.RpcRequest;
 import com.ipoca.bbrpc.core.api.RpcResponse;
+import com.ipoca.bbrpc.core.meta.ProviderMeta;
+import com.ipoca.bbrpc.core.util.MethodUtils;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  *@Author：xubang
@@ -22,7 +27,7 @@ public class ProviderBootstrap implements ApplicationContextAware {
 
     ApplicationContext applicationContext;
 
-    private Map<String, Object> skeleton = new HashMap<>();
+    private MultiValueMap<String, ProviderMeta> skeleton = new LinkedMultiValueMap<>();
 
     @PostConstruct // init-method
     // PreDestroy
@@ -37,21 +42,33 @@ public class ProviderBootstrap implements ApplicationContextAware {
 
     private void genInterface(Object x) {
         Class<?> itfer = x.getClass().getInterfaces()[0];
-        skeleton.put(itfer.getCanonicalName(), x);
+        Method[] methods = itfer.getMethods();
+        for (Method method : methods){
+            if (MethodUtils.checkLocalMethod(method)){
+                continue;
+            }
+            createProvider(itfer, x, method);
+        }
+        //skeleton.put(itfer.getCanonicalName(), x);
     }
 
-    public RpcResponse invokeRequest(RpcRequest request) {
+    private void createProvider(Class<?> itfer, Object x, Method method) {
+        ProviderMeta meta = new ProviderMeta();
+        meta.setMethod(method);
+        meta.setServiceImpl(x);
+        meta.setMethodSign(MethodUtils.methodSing(method));
+        System.out.println(" create a provider: " +meta);
+        skeleton.add(itfer.getCanonicalName(), meta);
+    }
 
-        String methodName= request.getMethod();
-        if (methodName.equals("toString") || methodName.equals("hashCode")){
-            return null;
-        }
-
+    public RpcResponse invoke(RpcRequest request) {
         RpcResponse rpcResponse = new RpcResponse();
-        Object bean = skeleton.get(request.getService());
+        List<ProviderMeta> providerMetas = skeleton.get(request.getService());
         try {
-            Method method = findMethod(bean.getClass(),request.getMethod());
-            Object result = method.invoke(bean, request.getArgs());
+            ProviderMeta meta = findProviderMeta(providerMetas,request.getMethodSign());
+
+            Method method = meta.getMethod();
+            Object result = method.invoke(meta.getServiceImpl(), request.getArgs());
             rpcResponse.setStatus(true);
             rpcResponse.setData(result);
             return rpcResponse;
@@ -63,13 +80,10 @@ public class ProviderBootstrap implements ApplicationContextAware {
         return rpcResponse;
     }
 
-    private Method findMethod(Class<?> aClass, String methodName) {
-        for (Method method : aClass.getMethods()) {
-            if (method.getName().equals(methodName)){
-                return method;
-            }
-        }
-        return null;
+    private ProviderMeta findProviderMeta(List<ProviderMeta> providerMetas, String methodSign) {
+        Optional<ProviderMeta> optional = providerMetas.stream()
+                .filter(x->x.getMethodSign().equals(methodSign)).findFirst();
+        return optional.orElse(null);
     }
 
 }

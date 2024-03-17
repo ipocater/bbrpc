@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ipoca.bbrpc.core.api.RpcRequest;
 import com.ipoca.bbrpc.core.api.RpcResponse;
+import com.ipoca.bbrpc.core.util.MethodUtils;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class BBInvocationHandler implements InvocationHandler {
 
         RpcRequest rpcRequest = new RpcRequest();
         rpcRequest.setService(service.getCanonicalName());
-        rpcRequest.setMethod(method.getName());
+        rpcRequest.setMethodSign(MethodUtils.methodSing(method));
         rpcRequest.setArgs(args);
 
         RpcResponse rpcResponse = post(rpcRequest);
