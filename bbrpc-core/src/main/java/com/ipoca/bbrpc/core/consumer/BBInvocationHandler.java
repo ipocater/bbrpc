@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ipoca.bbrpc.core.api.RpcRequest;
 import com.ipoca.bbrpc.core.api.RpcResponse;
 import com.ipoca.bbrpc.core.util.MethodUtils;
+import com.ipoca.bbrpc.core.util.TypeUtils;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -50,7 +51,7 @@ public class BBInvocationHandler implements InvocationHandler {
                 JSONObject jsonResult = (JSONObject) data;
                 return jsonResult.toJavaObject(method.getReturnType());
             } else {
-                return data;
+                return TypeUtils.cast(data, method.getReturnType());
             }
 
         } else {

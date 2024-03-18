@@ -14,6 +14,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
+import java.util.List;
+
 @SpringBootApplication
 @RestController
 @Import({ConsumerConfig.class})
@@ -32,18 +35,36 @@ public class BbrpcDemoConsumerApplication {
     @Bean
     public ApplicationRunner consumer_runner(){
         return x -> {
-            User user = userService.findById(1);
-            System.out.println("RPC result userService.findByid(1) " + user);
 
-            User user1 = userService.findById(1,"xubang");
-            System.out.println("RPC result userService.findByid(1,xubang) " + user1);
+//            System.out.println(userService.getId(new User(100,"bb")));
+//
+//            System.out.println(userService.getName());
+//
+//            System.out.println(Arrays.toString(userService.getIds()));
+//
+//            System.out.println(userService.getIdList());
 
-//            Order order = orderService.findById(404);
-//            System.out.println("RPC result orderService.findByid(404) " + order);
+//            System.out.println(userService.getUserList());
 
-            System.out.println(userService.getName());
+           // System.out.println(userService.getLongIds());
 
-            System.out.println(userService.getName(123));
+            System.out.println(" ===> userService.getLongIds()");
+            for (long id : userService.getIds(new int[]{4,5,6})){
+                System.out.println(id);
+            }
+
+//            User user = userService.findById(1);
+//            System.out.println("RPC result userService.findByid(1) " + user);
+//
+//            User user1 = userService.findById(1,"xubang");
+//            System.out.println("RPC result userService.findByid(1,xubang) " + user1);
+//
+////            Order order = orderService.findById(404);
+////            System.out.println("RPC result orderService.findByid(404) " + order);
+//
+//            System.out.println(userService.getName());
+//
+//            System.out.println(userService.getName(123));
 
         };
     }
