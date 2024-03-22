@@ -5,17 +5,23 @@ package com.ipoca.bbrpc.core.consumer;
  */
 
 import com.ipoca.bbrpc.core.api.LoadBalancer;
+import com.ipoca.bbrpc.core.api.RegistryCenter;
 import com.ipoca.bbrpc.core.api.Router;
 import com.ipoca.bbrpc.core.cluster.RandomLoadBalancer;
 import com.ipoca.bbrpc.core.cluster.RoundRibonLoadBalancer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 
+import java.util.List;
+
 @Configuration
 public class ConsumerConfig {
+    @Value("${bbrpc.providers}")
+    String servers;
 
     @Bean
     ConsumerBootstrap createConsumerBootstrap() {
@@ -41,5 +47,10 @@ public class ConsumerConfig {
     @Bean
     public Router router(){
         return Router.Default;
+    }
+
+    @Bean(initMethod = "start", destroyMethod = "stop")
+    public RegistryCenter consumer_rc(){
+        return new RegistryCenter.StaticRegistryCenter(List.of(servers.split(",")));
     }
 }
