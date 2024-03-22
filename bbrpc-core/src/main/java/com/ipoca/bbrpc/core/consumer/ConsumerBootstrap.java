@@ -3,6 +3,7 @@ package com.ipoca.bbrpc.core.consumer;
 import com.ipoca.bbrpc.core.annotation.BBConsumer;
 import com.ipoca.bbrpc.core.api.LoadBalancer;
 import com.ipoca.bbrpc.core.api.Router;
+import com.ipoca.bbrpc.core.api.RpcContext;
 import lombok.Data;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.context.ApplicationContext;
@@ -39,7 +40,11 @@ public class ConsumerBootstrap  implements ApplicationContextAware, EnvironmentA
         if (Strings.isEmpty(urls)){
             System.out.println("bbrpc.providers is empty.");
         }
-        String[] providers = urls.split(",");
+        List<String> providers = List.of(urls.split(","));
+
+        RpcContext context = new RpcContext();
+        context.setRouter(router);
+        context.setLoadBalancer(loadBalancer);
 
         String[] names = applicationContext.getBeanDefinitionNames();
         for (String name : names){
@@ -53,7 +58,7 @@ public class ConsumerBootstrap  implements ApplicationContextAware, EnvironmentA
                     String serviceName = service.getCanonicalName();
                     Object consumer = stub.get(serviceName);
                     if (consumer == null){
-                        consumer = createConsumer(service, router, loadBalancer, providers);
+                        consumer = createConsumer(service, context, providers);
                     }
                     f.setAccessible(true);
                     f.set(bean, consumer);
@@ -65,9 +70,9 @@ public class ConsumerBootstrap  implements ApplicationContextAware, EnvironmentA
         }
     }
 
-    private Object createConsumer(Class<?> service, Router router, LoadBalancer loadBalancer, String[] providers) {
+    private Object createConsumer(Class<?> service, RpcContext context, List<String> providers) {
         return Proxy.newProxyInstance(service.getClassLoader(),
-                new Class[]{service}, new BBInvocationHandler(service, router, loadBalancer, providers));
+                new Class[]{service}, new BBInvocationHandler(service, context, providers));
 
     }
 

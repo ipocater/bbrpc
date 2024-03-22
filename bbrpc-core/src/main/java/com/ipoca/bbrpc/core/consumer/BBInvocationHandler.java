@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ipoca.bbrpc.core.api.LoadBalancer;
 import com.ipoca.bbrpc.core.api.Router;
+import com.ipoca.bbrpc.core.api.RpcContext;
 import com.ipoca.bbrpc.core.api.RpcRequest;
 import com.ipoca.bbrpc.core.api.RpcResponse;
 import com.ipoca.bbrpc.core.util.MethodUtils;
@@ -29,17 +30,14 @@ public class BBInvocationHandler implements InvocationHandler {
 
     Class<?> service;
 
-    Router router;
+    RpcContext context;
 
-    LoadBalancer loadBalancer;
-
-    String[] providers;
+    List<String> providers;
 
 
-    public BBInvocationHandler(Class<?> clazz, Router router, LoadBalancer loadBalancer, String[] providers) {
+    public BBInvocationHandler(Class<?> clazz, RpcContext context, List<String> providers) {
         this.service = clazz;
-        this.router = router;
-        this.loadBalancer = loadBalancer;
+        this.context = context;
         this.providers = providers;
     }
 
@@ -56,8 +54,8 @@ public class BBInvocationHandler implements InvocationHandler {
         rpcRequest.setMethodSign(MethodUtils.methodSing(method));
         rpcRequest.setArgs(args);
 
-        List<String> urls = router.route(List.of(this.providers));
-        String url = loadBalancer.choose(urls);
+        List<String> urls = context.getRouter().route(this.providers);
+        String url = (String) context.getLoadBalancer().choose(urls);
         System.out.println("loadBalancer.choose(urls) ==> " + url);
         RpcResponse rpcResponse = post(rpcRequest, url);
 
