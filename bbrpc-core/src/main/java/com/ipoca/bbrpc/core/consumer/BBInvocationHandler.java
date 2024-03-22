@@ -2,6 +2,8 @@ package com.ipoca.bbrpc.core.consumer;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.ipoca.bbrpc.core.api.LoadBalancer;
+import com.ipoca.bbrpc.core.api.Router;
 import com.ipoca.bbrpc.core.api.RpcRequest;
 import com.ipoca.bbrpc.core.api.RpcResponse;
 import com.ipoca.bbrpc.core.util.MethodUtils;
@@ -11,6 +13,7 @@ import okhttp3.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -26,8 +29,18 @@ public class BBInvocationHandler implements InvocationHandler {
 
     Class<?> service;
 
-    public BBInvocationHandler(Class<?> clazz){
+    Router router;
+
+    LoadBalancer loadBalancer;
+
+    String[] providers;
+
+
+    public BBInvocationHandler(Class<?> clazz, Router router, LoadBalancer loadBalancer, String[] providers) {
         this.service = clazz;
+        this.router = router;
+        this.loadBalancer = loadBalancer;
+        this.providers = providers;
     }
 
     @Override
@@ -43,7 +56,10 @@ public class BBInvocationHandler implements InvocationHandler {
         rpcRequest.setMethodSign(MethodUtils.methodSing(method));
         rpcRequest.setArgs(args);
 
-        RpcResponse rpcResponse = post(rpcRequest);
+        List<String> urls = router.route(List.of(this.providers));
+        String url = loadBalancer.choose(urls);
+        System.out.println("loadBalancer.choose(urls) ==> " + url);
+        RpcResponse rpcResponse = post(rpcRequest, url);
 
         if (rpcResponse.isStatus()){
             Object data = rpcResponse.getData();
@@ -68,11 +84,11 @@ public class BBInvocationHandler implements InvocationHandler {
             .connectTimeout(10, TimeUnit.SECONDS)
             .build();
 
-    private RpcResponse post(RpcRequest rpcRequest) {
+    private RpcResponse post(RpcRequest rpcRequest, String url) {
         String reqJson = JSON.toJSONString(rpcRequest);
         System.out.println(" ===> reqJson = " + reqJson);
         Request request = new Request.Builder()
-                .url("http://localhost:8080/")
+                .url(url)
                 .post(RequestBody.create(reqJson,JSONTYPE))
                 .build();
         try {

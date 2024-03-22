@@ -3,6 +3,8 @@ package com.ipoca.bbrpc.demo.provider;
 import com.ipoca.bbrpc.core.annotation.BBProvider;
 import com.ipoca.bbrpc.demo.api.User;
 import com.ipoca.bbrpc.demo.api.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -12,15 +14,16 @@ import java.util.List;
 @BBProvider
 public class UserServiceImpl implements UserService {
 
-
+    @Autowired
+    Environment environment;
     @Override
     public User findById(int id) {
-        return new User(id, "bb-" + System.currentTimeMillis());
+        return new User(id, "bb-" + environment.getProperty("server.port") + "_" + System.currentTimeMillis());
     }
 
     @Override
     public User findById(int id, String name) {
-        return new User(id, "bb-" + name + "_" + System.currentTimeMillis());
+        return new User(id, "bb-" + environment.getProperty("server.port") + "_" + name + "_" + System.currentTimeMillis());
     }
 
     @Override

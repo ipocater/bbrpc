@@ -4,6 +4,10 @@ package com.ipoca.bbrpc.core.consumer;
  *@Date：2024/3/15  10:55
  */
 
+import com.ipoca.bbrpc.core.api.LoadBalancer;
+import com.ipoca.bbrpc.core.api.Router;
+import com.ipoca.bbrpc.core.cluster.RandomLoadBalancer;
+import com.ipoca.bbrpc.core.cluster.RoundRibonLoadBalancer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -26,5 +30,16 @@ public class ConsumerConfig {
             consumerBootstrap.start();
             System.out.println("consumerBootstrap started ...");
         };
+    }
+
+    @Bean
+    public LoadBalancer loadBalancer(){
+        //return new RandomLoadBalancer();
+        return new RoundRibonLoadBalancer();
+    }
+
+    @Bean
+    public Router router(){
+        return Router.Default;
     }
 }
