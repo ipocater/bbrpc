@@ -42,7 +42,7 @@ public class BbrpcDemoProviderApplication {
             request.setArgs(new Object[]{100});
 
             RpcResponse rpcResponse = providerBootstrap.invoke(request);
-            System.out.println("return : " + rpcResponse.getData());
+            //System.out.println("return : " + rpcResponse.getData());
         };
     }
 }
