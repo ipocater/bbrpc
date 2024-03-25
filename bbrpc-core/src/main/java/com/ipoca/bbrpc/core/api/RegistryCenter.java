@@ -1,5 +1,8 @@
 package com.ipoca.bbrpc.core.api;
 
+import com.ipoca.bbrpc.core.registry.ChangedListener;
+import com.ipoca.bbrpc.core.registry.Event;
+
 import java.util.List;
 
 /**
@@ -17,9 +20,9 @@ public interface RegistryCenter {
 
     // consumer侧
     List<String> fetchAll(String service);
-    //void subscribe();
+    void subscribe(String service, ChangedListener listener);
 
-    class StaticRegistryCenter implements RegistryCenter{
+    class StaticRegistryCenter implements RegistryCenter,ChangedListener{
 
         List<String> providers;
         public StaticRegistryCenter(List<String> providers){
@@ -49,6 +52,16 @@ public interface RegistryCenter {
         @Override
         public List<String> fetchAll(String service) {
             return providers;
+        }
+
+        @Override
+        public void subscribe(String service, ChangedListener listener) {
+
+        }
+
+        @Override
+        public void fire(Event event) {
+
         }
     }
 
