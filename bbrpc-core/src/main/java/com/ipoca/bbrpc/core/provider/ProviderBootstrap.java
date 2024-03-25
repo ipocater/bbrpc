@@ -34,6 +34,8 @@ public class ProviderBootstrap implements ApplicationContextAware {
 
     ApplicationContext applicationContext;
 
+    RegistryCenter rc;
+
     private MultiValueMap<String, ProviderMeta> skeleton = new LinkedMultiValueMap<>();
     private String instance;
     @Value("${server.port}")
@@ -43,6 +45,7 @@ public class ProviderBootstrap implements ApplicationContextAware {
     @PostConstruct // init-method
     public void init() {
         Map<String, Object> providers = applicationContext.getBeansWithAnnotation(BBProvider.class);
+        rc  = applicationContext.getBean(RegistryCenter.class);
         providers.forEach((x,y) -> System.out.println(x));
 
         providers.values().forEach(
@@ -55,11 +58,14 @@ public class ProviderBootstrap implements ApplicationContextAware {
     public void start(){
         String ip = InetAddress.getLocalHost().getHostAddress();
         instance = ip + "_" + port;
+        rc.start();
         skeleton.keySet().forEach(this::registerService);
     }
     @PreDestroy
     public void stop(){
+        System.out.println(" ===> unreg all services.");
         skeleton.keySet().forEach(this::unregisterService);
+        rc.stop();
     }
 
     private void registerService(String service) {
@@ -68,7 +74,6 @@ public class ProviderBootstrap implements ApplicationContextAware {
     }
 
     private void unregisterService(String service) {
-        RegistryCenter rc = applicationContext.getBean(RegistryCenter.class);
         rc.unregister(service, instance);
     }
 
