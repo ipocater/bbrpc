@@ -21,7 +21,6 @@ public class ZkRegistryCenter implements RegistryCenter {
     private CuratorFramework client = null;
     @Override
     public void start() {
-
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000,3);
         client = CuratorFrameworkFactory.builder()
                 .connectString("localhost:2181")
