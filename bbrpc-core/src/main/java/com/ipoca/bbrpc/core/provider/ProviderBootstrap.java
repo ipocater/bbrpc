@@ -31,16 +31,14 @@ import java.util.Optional;
  */
 @Data
 public class ProviderBootstrap implements ApplicationContextAware {
-
     ApplicationContext applicationContext;
-
     RegistryCenter rc;
 
     private MultiValueMap<String, ProviderMeta> skeleton = new LinkedMultiValueMap<>();
     private String instance;
+
     @Value("${server.port}")
     private String port;
-
 
     @PostConstruct // init-method
     public void init() {
@@ -51,9 +49,7 @@ public class ProviderBootstrap implements ApplicationContextAware {
         providers.values().forEach(
                 x -> genInterface(x)
         );
-
     }
-
     @SneakyThrows
     public void start(){
         String ip = InetAddress.getLocalHost().getHostAddress();
@@ -82,15 +78,12 @@ public class ProviderBootstrap implements ApplicationContextAware {
                 itfer -> {
                     Method[] methods = itfer.getMethods();
                     for (Method method : methods){
-                        if (MethodUtils.checkLocalMethod(method)){
-                            continue;
-                        }
+                        if (MethodUtils.checkLocalMethod(method)) continue;
                         createProvider(itfer, x, method);
                     }
                 }
         );
     }
-
     private void createProvider(Class<?> itfer, Object x, Method method) {
         ProviderMeta meta = new ProviderMeta();
         meta.setMethod(method);
@@ -99,7 +92,4 @@ public class ProviderBootstrap implements ApplicationContextAware {
         System.out.println(" create a provider: " +meta);
         skeleton.add(itfer.getCanonicalName(), meta);
     }
-
-
-
 }

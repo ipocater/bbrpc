@@ -1,7 +1,13 @@
 package com.ipoca.bbrpc.core.util;
 
+import com.ipoca.bbrpc.core.annotation.BBConsumer;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  *@Author：xubang
@@ -41,6 +47,19 @@ public class MethodUtils {
         Arrays.stream(MethodUtils.class.getMethods()).forEach(
                 m -> System.out.println(methodSing(m))
         );
+    }
 
+    public static List<Field> findAnnotatedField(Class<?> aClass, Class<? extends Annotation> annotationClass) {
+        List<Field> result = new ArrayList<>();
+        while (aClass != null){
+            Field[] fields = aClass.getDeclaredFields();
+            for (Field field :fields){
+                if (field.isAnnotationPresent(annotationClass)){
+                    result.add(field);
+                }
+            }
+            aClass = aClass.getSuperclass();
+        }
+        return result;
     }
 }

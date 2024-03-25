@@ -7,6 +7,7 @@ import com.ipoca.bbrpc.core.api.Router;
 import com.ipoca.bbrpc.core.api.RpcContext;
 import com.ipoca.bbrpc.core.registry.ChangedListener;
 import com.ipoca.bbrpc.core.registry.Event;
+import com.ipoca.bbrpc.core.util.MethodUtils;
 import lombok.Data;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.context.ApplicationContext;
@@ -21,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.ipoca.bbrpc.core.util.MethodUtils.findAnnotatedField;
 
 /**
  *@Author：xubang
@@ -47,7 +50,7 @@ public class ConsumerBootstrap  implements ApplicationContextAware, EnvironmentA
         String[] names = applicationContext.getBeanDefinitionNames();
         for (String name : names){
             Object bean = applicationContext.getBean(name);
-            List<Field> fields = findAnnotatedField(bean.getClass());
+            List<Field> fields = MethodUtils.findAnnotatedField(bean.getClass(), BBConsumer.class);
 
             fields.stream().forEach( f ->{
                 System.out.println(" ===>  " + f.getName());
@@ -92,20 +95,6 @@ public class ConsumerBootstrap  implements ApplicationContextAware, EnvironmentA
 
     }
 
-    //todo  stream重写
-    private List<Field> findAnnotatedField(Class<?> aClass) {
-        List<Field> result = new ArrayList<>();
-        while (aClass != null){
-            Field[] fields = aClass.getDeclaredFields();
-            for (Field field :fields){
-                if (field.isAnnotationPresent(BBConsumer.class)){
-                    result.add(field);
-                }
-            }
-            aClass = aClass.getSuperclass();
-        }
-        return result;
-    }
 
 
 }

@@ -1,22 +1,22 @@
 package com.ipoca.bbrpc.core.consumer;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.ipoca.bbrpc.core.api.LoadBalancer;
-import com.ipoca.bbrpc.core.api.Router;
 import com.ipoca.bbrpc.core.api.RpcContext;
 import com.ipoca.bbrpc.core.api.RpcRequest;
 import com.ipoca.bbrpc.core.api.RpcResponse;
 import com.ipoca.bbrpc.core.util.MethodUtils;
 import com.ipoca.bbrpc.core.util.TypeUtils;
-import okhttp3.*;
+import okhttp3.ConnectionPool;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 
 
 /**
@@ -29,9 +29,7 @@ public class BBInvocationHandler implements InvocationHandler {
     final static MediaType JSONTYPE = MediaType.get("application/json; charset=utf-8");
 
     Class<?> service;
-
     RpcContext context;
-
     List<String> providers;
 
 
@@ -43,9 +41,7 @@ public class BBInvocationHandler implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-
-        String name = method.getName();
-        if (name.equals("toString") || name.equals("hashCode")){
+        if (MethodUtils.checkLocalMethod(method.getName())){
             return null;
         }
 
@@ -57,23 +53,18 @@ public class BBInvocationHandler implements InvocationHandler {
         List<String> urls = context.getRouter().route(this.providers);
         String url = (String) context.getLoadBalancer().choose(urls);
         System.out.println("loadBalancer.choose(urls) ==> " + url);
-        RpcResponse rpcResponse = post(rpcRequest, url);
+        RpcResponse<Object> rpcResponse = post(rpcRequest, url);
 
-        if (rpcResponse.isStatus()){
+        if (rpcResponse.isStatus()) {
             Object data = rpcResponse.getData();
-            if (data instanceof JSONObject){
-                JSONObject jsonResult = (JSONObject) data;
-                return jsonResult.toJavaObject(method.getReturnType());
-            } else {
-                return TypeUtils.cast(data, method.getReturnType());
-            }
-
+            return TypeUtils.castMethodResult(method, data);
         } else {
             Exception ex = rpcResponse.getEx();
-            //ex.printStackTrace();
-            throw  new RuntimeException(ex);
+            throw new RuntimeException(ex);
         }
     }
+
+
 
     OkHttpClient client = new OkHttpClient.Builder()
             .connectionPool(new ConnectionPool(16, 60, TimeUnit.SECONDS))
