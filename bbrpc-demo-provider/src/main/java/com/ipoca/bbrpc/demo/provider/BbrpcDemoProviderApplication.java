@@ -4,6 +4,7 @@ import com.ipoca.bbrpc.core.api.RpcRequest;
 import com.ipoca.bbrpc.core.api.RpcResponse;
 import com.ipoca.bbrpc.core.provider.ProviderBootstrap;
 import com.ipoca.bbrpc.core.provider.ProviderConfig;
+import com.ipoca.bbrpc.core.provider.ProviderInvoker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -26,11 +27,11 @@ public class BbrpcDemoProviderApplication {
     //使用HTTP + JSON 来实现序列化和通信
 
     @Autowired
-    ProviderBootstrap providerBootstrap;
+    ProviderInvoker providerInvoker;
 
     @RequestMapping("/")
     public RpcResponse invoke(@RequestBody RpcRequest request){
-        return providerBootstrap.invoke(request);
+        return providerInvoker.invoke(request);
     }
 
     @Bean
@@ -41,8 +42,8 @@ public class BbrpcDemoProviderApplication {
             request.setMethodSign("findById@1_int");
             request.setArgs(new Object[]{100});
 
-            RpcResponse rpcResponse = providerBootstrap.invoke(request);
-            //System.out.println("return : " + rpcResponse.getData());
+            RpcResponse rpcResponse = invoke(request);
+            System.out.println("return : " + rpcResponse.getData());
         };
     }
 }
