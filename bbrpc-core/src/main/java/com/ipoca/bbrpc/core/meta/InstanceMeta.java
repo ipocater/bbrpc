@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import java.util.Map;
 
 /**
+ * 描述服务元数据
+ *
  * @Author xubang
  * @Date 2024/3/26 10:06
  */
@@ -40,7 +42,12 @@ public class InstanceMeta {
 
     @Override
     public String toString() {
-        return String.format("%s://%s:%d%s",schema, host, port,context);
+        return String.format("%s://%s:%d/%s",schema, host, port,context);
+
+    }
+
+    public String toUrl() {
+        return String.format("%s://%s:%d/%s",schema, host, port,context);
 
     }
 }

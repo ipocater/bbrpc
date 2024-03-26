@@ -1,6 +1,7 @@
 package com.ipoca.bbrpc.core.api;
 
 import com.ipoca.bbrpc.core.meta.InstanceMeta;
+import com.ipoca.bbrpc.core.meta.ServiceMeta;
 import com.ipoca.bbrpc.core.registry.ChangedListener;
 import com.ipoca.bbrpc.core.registry.Event;
 
@@ -16,12 +17,12 @@ public interface RegistryCenter {
     void stop();
 
     // provider侧
-    void register(String service, InstanceMeta instance);
-    void unregister(String service, InstanceMeta instance);
+    void register(ServiceMeta service, InstanceMeta instance);
+    void unregister(ServiceMeta service, InstanceMeta instance);
 
     // consumer侧
-    List<InstanceMeta> fetchAll(String service);
-    void subscribe(String service, ChangedListener listener);
+    List<InstanceMeta> fetchAll(ServiceMeta service);
+    void subscribe(ServiceMeta service, ChangedListener listener);
 
     class StaticRegistryCenter implements RegistryCenter,ChangedListener{
 
@@ -41,22 +42,22 @@ public interface RegistryCenter {
         }
 
         @Override
-        public void register(String service, InstanceMeta instance) {
+        public void register(ServiceMeta service, InstanceMeta instance) {
 
         }
 
         @Override
-        public void unregister(String service, InstanceMeta instance) {
+        public void unregister(ServiceMeta service, InstanceMeta instance) {
 
         }
 
         @Override
-        public List<InstanceMeta> fetchAll(String service) {
+        public List<InstanceMeta> fetchAll(ServiceMeta service) {
             return providers;
         }
 
         @Override
-        public void subscribe(String service, ChangedListener listener) {
+        public void subscribe(ServiceMeta service, ChangedListener listener) {
 
         }
 
