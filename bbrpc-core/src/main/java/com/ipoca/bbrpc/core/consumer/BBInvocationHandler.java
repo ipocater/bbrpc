@@ -8,6 +8,7 @@ import com.ipoca.bbrpc.core.consumer.http.OkHttpInvoker;
 import com.ipoca.bbrpc.core.meta.InstanceMeta;
 import com.ipoca.bbrpc.core.util.MethodUtils;
 import com.ipoca.bbrpc.core.util.TypeUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -20,7 +21,7 @@ import java.util.List;
  *@Author：xubang
  *@Date：2024/3/15  11:10
  */
-    
+@Slf4j
 public class BBInvocationHandler implements InvocationHandler {
 
     Class<?> service;
@@ -49,7 +50,7 @@ public class BBInvocationHandler implements InvocationHandler {
 
         List<InstanceMeta> instances = context.getRouter().route(providers);
         InstanceMeta instance = context.getLoadBalancer().choose(instances);
-        System.out.println("loadBalancer.choose(instances) ==> " + instances);
+        log.debug("loadBalancer.choose(instances) ==> " + instances);
         RpcResponse<?> rpcResponse = httpInvoker.post(rpcRequest, instance.toUrl());
 
         if (rpcResponse.isStatus()) {

@@ -1,6 +1,6 @@
 package com.ipoca.bbrpc.core.util;
 
-import com.ipoca.bbrpc.core.annotation.BBConsumer;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -13,7 +13,8 @@ import java.util.List;
  *@Author：xubang
  *@Date：2024/3/17  16:40
  */
-    
+
+@Slf4j
 public class MethodUtils {
 
     public static boolean checkLocalMethod(final String method){
@@ -45,7 +46,7 @@ public class MethodUtils {
 
     public static void main(String[] args) {
         Arrays.stream(MethodUtils.class.getMethods()).forEach(
-                m -> System.out.println(methodSing(m))
+                m -> log.debug(methodSing(m))
         );
     }
 
