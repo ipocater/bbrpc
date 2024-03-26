@@ -2,11 +2,9 @@ package com.ipoca.bbrpc.core.provider;
 
 import com.ipoca.bbrpc.core.annotation.BBProvider;
 import com.ipoca.bbrpc.core.api.RegistryCenter;
-import com.ipoca.bbrpc.core.api.RpcRequest;
-import com.ipoca.bbrpc.core.api.RpcResponse;
+import com.ipoca.bbrpc.core.meta.InstanceMeta;
 import com.ipoca.bbrpc.core.meta.ProviderMeta;
 import com.ipoca.bbrpc.core.util.MethodUtils;
-import com.ipoca.bbrpc.core.util.TypeUtils;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.Data;
@@ -17,13 +15,10 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  *@Author：xubang
@@ -35,7 +30,7 @@ public class ProviderBootstrap implements ApplicationContextAware {
     RegistryCenter rc;
 
     private MultiValueMap<String, ProviderMeta> skeleton = new LinkedMultiValueMap<>();
-    private String instance;
+    private InstanceMeta instance;
 
     @Value("${server.port}")
     private String port;
@@ -53,7 +48,7 @@ public class ProviderBootstrap implements ApplicationContextAware {
     @SneakyThrows
     public void start(){
         String ip = InetAddress.getLocalHost().getHostAddress();
-        instance = ip + "_" + port;
+        instance = InstanceMeta.http(ip, Integer.valueOf(port));
         rc.start();
         skeleton.keySet().forEach(this::registerService);
     }

@@ -1,5 +1,6 @@
 package com.ipoca.bbrpc.core.api;
 
+import com.ipoca.bbrpc.core.meta.InstanceMeta;
 import lombok.Data;
 
 /**
@@ -11,8 +12,8 @@ public class RpcContext {
 
     Filter filter; //todo
 
-    Router router;
+    Router<InstanceMeta> router;
 
-    LoadBalancer loadBalancer;
+    LoadBalancer<InstanceMeta> loadBalancer;
 
 }

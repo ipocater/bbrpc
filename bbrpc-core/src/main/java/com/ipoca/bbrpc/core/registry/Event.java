@@ -1,5 +1,6 @@
 package com.ipoca.bbrpc.core.registry;
 
+import com.ipoca.bbrpc.core.meta.InstanceMeta;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -12,5 +13,5 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class Event {
-    List<String> data;
+    List<InstanceMeta> data;
 }

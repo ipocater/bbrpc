@@ -5,6 +5,7 @@ import com.ipoca.bbrpc.core.api.RpcRequest;
 import com.ipoca.bbrpc.core.api.RpcResponse;
 import com.ipoca.bbrpc.core.consumer.http.HttpInvoker;
 import com.ipoca.bbrpc.core.consumer.http.OkHttpInvoker;
+import com.ipoca.bbrpc.core.meta.InstanceMeta;
 import com.ipoca.bbrpc.core.util.MethodUtils;
 import com.ipoca.bbrpc.core.util.TypeUtils;
 
@@ -24,12 +25,12 @@ public class BBInvocationHandler implements InvocationHandler {
 
     Class<?> service;
     RpcContext context;
-    List<String> providers;
+    List<InstanceMeta> providers;
 
     HttpInvoker httpInvoker = new OkHttpInvoker();
 
 
-    public BBInvocationHandler(Class<?> clazz, RpcContext context, List<String> providers) {
+    public BBInvocationHandler(Class<?> clazz, RpcContext context, List<InstanceMeta> providers) {
         this.service = clazz;
         this.context = context;
         this.providers = providers;
@@ -46,10 +47,10 @@ public class BBInvocationHandler implements InvocationHandler {
         rpcRequest.setMethodSign(MethodUtils.methodSing(method));
         rpcRequest.setArgs(args);
 
-        List<String> urls = context.getRouter().route(this.providers);
-        String url = (String) context.getLoadBalancer().choose(urls);
-        System.out.println("loadBalancer.choose(urls) ==> " + url);
-        RpcResponse<?> rpcResponse = httpInvoker.post(rpcRequest, url);
+        List<InstanceMeta> instances = context.getRouter().route(providers);
+        InstanceMeta instance = context.getLoadBalancer().choose(instances);
+        System.out.println("loadBalancer.choose(instances) ==> " + instances);
+        RpcResponse<?> rpcResponse = httpInvoker.post(rpcRequest, instance.toString());
 
         if (rpcResponse.isStatus()) {
             Object data = rpcResponse.getData();
