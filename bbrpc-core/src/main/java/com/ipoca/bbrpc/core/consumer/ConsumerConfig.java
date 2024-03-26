@@ -7,17 +7,15 @@ package com.ipoca.bbrpc.core.consumer;
 import com.ipoca.bbrpc.core.api.LoadBalancer;
 import com.ipoca.bbrpc.core.api.RegistryCenter;
 import com.ipoca.bbrpc.core.api.Router;
-import com.ipoca.bbrpc.core.cluster.RandomLoadBalancer;
 import com.ipoca.bbrpc.core.cluster.RoundRibonLoadBalancer;
-import com.ipoca.bbrpc.core.registry.ZkRegistryCenter;
+import com.ipoca.bbrpc.core.meta.InstanceMeta;
+import com.ipoca.bbrpc.core.registry.zk.ZkRegistryCenter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-
-import java.util.List;
 
 @Configuration
 public class ConsumerConfig {
@@ -40,13 +38,13 @@ public class ConsumerConfig {
     }
 
     @Bean
-    public LoadBalancer loadBalancer(){
+    public LoadBalancer<InstanceMeta> loadBalancer(){
         //return new RandomLoadBalancer();
         return new RoundRibonLoadBalancer();
     }
 
     @Bean
-    public Router router(){
+    public Router<InstanceMeta> router(){
         return Router.Default;
     }
 

@@ -1,5 +1,7 @@
 package com.ipoca.bbrpc.core.api;
 
+import com.ipoca.bbrpc.core.meta.InstanceMeta;
+
 import java.util.List;
 
 /**
@@ -10,6 +12,6 @@ public interface Router<T> {
 
     List<T> route(List<T> providers);
 
-    Router Default = p -> p;
+    Router<InstanceMeta> Default = p -> p;
 
 }

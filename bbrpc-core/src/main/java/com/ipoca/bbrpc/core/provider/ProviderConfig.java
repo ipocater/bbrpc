@@ -1,15 +1,12 @@
 package com.ipoca.bbrpc.core.provider;
 
 import com.ipoca.bbrpc.core.api.RegistryCenter;
-import com.ipoca.bbrpc.core.consumer.ConsumerBootstrap;
-import com.ipoca.bbrpc.core.registry.ZkRegistryCenter;
+import com.ipoca.bbrpc.core.registry.zk.ZkRegistryCenter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-
-import java.util.List;
 
 /**
  *@Author：xubang

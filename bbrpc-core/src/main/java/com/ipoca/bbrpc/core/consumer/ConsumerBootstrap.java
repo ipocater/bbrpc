@@ -20,7 +20,6 @@ import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  *@Author：xubang
@@ -47,11 +46,11 @@ public class ConsumerBootstrap  implements ApplicationContextAware, EnvironmentA
     public void start() {
         Router<InstanceMeta> router = applicationContext.getBean(Router.class);
         LoadBalancer<InstanceMeta> loadBalancer = applicationContext.getBean(LoadBalancer.class);
+        RegistryCenter rc = applicationContext.getBean(RegistryCenter.class);
+
         RpcContext context = new RpcContext();
         context.setRouter(router);
         context.setLoadBalancer(loadBalancer);
-
-        RegistryCenter rc = applicationContext.getBean(RegistryCenter.class);
 
         String[] names = applicationContext.getBeanDefinitionNames();
         for (String name : names){
