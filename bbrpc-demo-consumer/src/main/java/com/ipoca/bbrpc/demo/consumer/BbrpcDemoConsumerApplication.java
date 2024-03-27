@@ -1,11 +1,7 @@
 package com.ipoca.bbrpc.demo.consumer;
 
 import com.ipoca.bbrpc.core.annotation.BBConsumer;
-import com.ipoca.bbrpc.core.api.RpcRequest;
-import com.ipoca.bbrpc.core.api.RpcResponse;
-import com.ipoca.bbrpc.core.consumer.ConsumerBootstrap;
 import com.ipoca.bbrpc.core.consumer.ConsumerConfig;
-import com.ipoca.bbrpc.demo.api.Order;
 import com.ipoca.bbrpc.demo.api.OrderService;
 import com.ipoca.bbrpc.demo.api.User;
 import com.ipoca.bbrpc.demo.api.UserService;
@@ -14,12 +10,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Arrays;
-import java.util.List;
 
 @SpringBootApplication
 @RestController

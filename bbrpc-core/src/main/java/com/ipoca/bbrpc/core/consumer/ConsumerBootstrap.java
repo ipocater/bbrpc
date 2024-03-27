@@ -1,10 +1,7 @@
 package com.ipoca.bbrpc.core.consumer;
 
 import com.ipoca.bbrpc.core.annotation.BBConsumer;
-import com.ipoca.bbrpc.core.api.LoadBalancer;
-import com.ipoca.bbrpc.core.api.RegistryCenter;
-import com.ipoca.bbrpc.core.api.Router;
-import com.ipoca.bbrpc.core.api.RpcContext;
+import com.ipoca.bbrpc.core.api.*;
 import com.ipoca.bbrpc.core.meta.InstanceMeta;
 import com.ipoca.bbrpc.core.meta.ServiceMeta;
 import com.ipoca.bbrpc.core.util.MethodUtils;
@@ -49,10 +46,12 @@ public class ConsumerBootstrap  implements ApplicationContextAware, EnvironmentA
         Router<InstanceMeta> router = applicationContext.getBean(Router.class);
         LoadBalancer<InstanceMeta> loadBalancer = applicationContext.getBean(LoadBalancer.class);
         RegistryCenter rc = applicationContext.getBean(RegistryCenter.class);
+        List<Filter> filters = applicationContext.getBeansOfType(Filter.class).values().stream().toList();
 
         RpcContext context = new RpcContext();
         context.setRouter(router);
         context.setLoadBalancer(loadBalancer);
+        context.setFilters(filters);
 
         String[] names = applicationContext.getBeanDefinitionNames();
         for (String name : names){

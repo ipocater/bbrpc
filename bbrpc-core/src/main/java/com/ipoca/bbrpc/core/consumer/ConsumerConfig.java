@@ -4,10 +4,12 @@ package com.ipoca.bbrpc.core.consumer;
  *@Date：2024/3/15  10:55
  */
 
+import com.ipoca.bbrpc.core.api.Filter;
 import com.ipoca.bbrpc.core.api.LoadBalancer;
 import com.ipoca.bbrpc.core.api.RegistryCenter;
 import com.ipoca.bbrpc.core.api.Router;
 import com.ipoca.bbrpc.core.cluster.RoundRibonLoadBalancer;
+import com.ipoca.bbrpc.core.filter.CacheFilter;
 import com.ipoca.bbrpc.core.meta.InstanceMeta;
 import com.ipoca.bbrpc.core.registry.zk.ZkRegistryCenter;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +50,11 @@ public class ConsumerConfig {
     @Bean
     public Router<InstanceMeta> router(){
         return Router.Default;
+    }
+
+    @Bean
+    public Filter filter(){
+        return new CacheFilter();
     }
 
     @Bean(initMethod = "start", destroyMethod = "stop")

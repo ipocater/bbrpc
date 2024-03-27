@@ -3,7 +3,7 @@ GET http://localhost:8088/?id=101
 
 
 ### 获取用户信息
-POST http://localhost:8081/
+POST http://localhost:8088/
 Content-Type: application/json
 
 {
