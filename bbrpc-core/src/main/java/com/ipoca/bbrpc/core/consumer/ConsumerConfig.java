@@ -10,6 +10,7 @@ import com.ipoca.bbrpc.core.api.RegistryCenter;
 import com.ipoca.bbrpc.core.api.Router;
 import com.ipoca.bbrpc.core.cluster.RoundRibonLoadBalancer;
 import com.ipoca.bbrpc.core.filter.CacheFilter;
+import com.ipoca.bbrpc.core.filter.MockFilter;
 import com.ipoca.bbrpc.core.meta.InstanceMeta;
 import com.ipoca.bbrpc.core.registry.zk.ZkRegistryCenter;
 import lombok.extern.slf4j.Slf4j;
@@ -53,9 +54,14 @@ public class ConsumerConfig {
     }
 
     @Bean
-    public Filter filter(){
+    public Filter filter1(){
         return new CacheFilter();
     }
+
+//    @Bean
+//    public Filter filter2(){
+//        return new MockFilter();
+//    }
 
     @Bean(initMethod = "start", destroyMethod = "stop")
     public RegistryCenter consumer_rc(){

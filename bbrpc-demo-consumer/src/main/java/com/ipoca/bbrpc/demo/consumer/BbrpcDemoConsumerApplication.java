@@ -37,10 +37,10 @@ public class BbrpcDemoConsumerApplication {
     @Bean
     public ApplicationRunner consumer_runner(){
         return x -> {
-            System.out.println(" ===> userService.getLongIds()");
-            for (long id : userService.getIds(new int[]{4,5,6})){
-                System.out.println(id);
-            }
+//            System.out.println(" ===> userService.getLongIds()");
+//            for (long id : userService.getIds(new int[]{4,5,6})){
+//                System.out.println(id);
+//            }
 
 
         };
