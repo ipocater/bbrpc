@@ -4,6 +4,7 @@ import com.ipoca.bbrpc.core.meta.InstanceMeta;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author xubang
@@ -12,10 +13,12 @@ import java.util.List;
 @Data
 public class RpcContext {
 
-    List<Filter> filters; //todo
+    List<Filter> filters;
 
     Router<InstanceMeta> router;
 
     LoadBalancer<InstanceMeta> loadBalancer;
+
+    private Map<String, String> parameters;
 
 }

@@ -20,10 +20,10 @@ public class InstanceMeta {
     private String schema;
     private String host;
     private Integer port;
-    private String context;
+    private String context; // dubbo url?k1=v1
 
     private boolean status;// online or offline
-    private Map<String, String> parameter;
+    private Map<String, String> parameter; // idc A B C
 
     public InstanceMeta(String schema, String host, Integer port, String context) {
         this.schema = schema;
