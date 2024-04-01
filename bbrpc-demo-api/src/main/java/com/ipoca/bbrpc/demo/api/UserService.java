@@ -26,4 +26,6 @@ public interface UserService {
     long[] getLongIds();
 
     int[] getIds(int[] ids);
+
+    User ex(boolean flag);
 }
