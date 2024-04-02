@@ -54,9 +54,14 @@ public class ConsumerConfig {
     }
 
     @Bean
-    public Filter filter1(){
-        return new CacheFilter();
+    public Filter defaultFilter(){
+        return Filter.Default;
     }
+
+//    @Bean
+//    public Filter filter1(){
+//        return new CacheFilter();
+//    }
 
 //    @Bean
 //    public Filter filter2(){

@@ -43,10 +43,10 @@ public class BbrpcDemoConsumerApplication {
     @Bean
     public ApplicationRunner consumer_runner(){
         return x -> {
-//            long start = System.currentTimeMillis();
-//            userService.find(1000);
-//            System.out.println("userService.find take " + (System.currentTimeMillis() - start) + "ms");
-            testAll();
+            long start = System.currentTimeMillis();
+            userService.find(3000);
+            System.out.println("userService.find take " + (System.currentTimeMillis() - start) + "ms");
+            //testAll();
         };
     }
 

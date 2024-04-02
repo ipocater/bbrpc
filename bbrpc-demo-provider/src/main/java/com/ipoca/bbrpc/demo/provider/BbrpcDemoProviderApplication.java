@@ -5,6 +5,7 @@ import com.ipoca.bbrpc.core.api.RpcResponse;
 import com.ipoca.bbrpc.core.provider.ProviderBootstrap;
 import com.ipoca.bbrpc.core.provider.ProviderConfig;
 import com.ipoca.bbrpc.core.provider.ProviderInvoker;
+import com.ipoca.bbrpc.demo.api.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
@@ -32,6 +34,18 @@ public class BbrpcDemoProviderApplication {
     @RequestMapping("/")
     public RpcResponse invoke(@RequestBody RpcRequest request){
         return providerInvoker.invoke(request);
+    }
+
+    @Autowired
+    UserService userService;
+
+    @RequestMapping("/ports")
+    public RpcResponse<String> ports(@RequestParam("ports") String ports){
+        userService.setTimeoutPorts(ports);
+        RpcResponse<String> response = new RpcResponse<>();
+        response.setStatus(true);
+        response.setData("OK:" + ports);
+        return response;
     }
 
     @Bean

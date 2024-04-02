@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class RoundRibonLoadBalancer<T> implements LoadBalancer<T> {
 
-    AtomicInteger index = new AtomicInteger(0);
+    AtomicInteger index = new AtomicInteger(1);
     @Override
     public T choose(List<T> providers) {
         if (providers == null || providers.size() ==0) return null;

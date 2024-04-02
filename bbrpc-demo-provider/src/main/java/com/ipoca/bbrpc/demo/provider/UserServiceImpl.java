@@ -77,18 +77,24 @@ public class UserServiceImpl implements UserService {
         return new User(100, "BB100");
     }
 
+
+    String timeoutPorts = "8081,8094";
+
     @Override
     public User find(int timeout) {
         String prot = environment.getProperty("server.port");
-        if ("8081".equals(prot)) {
+        if (Arrays.stream(timeoutPorts.split(",")).anyMatch(prot::equals)) {
             try {
                 Thread.sleep(timeout);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
-        return new User(100, "BB100");
+        return new User(100, "BB100_" + prot);
     }
 
 
+    public void setTimeoutPorts(String timeoutPorts) {
+        this.timeoutPorts = timeoutPorts;
+    }
 }

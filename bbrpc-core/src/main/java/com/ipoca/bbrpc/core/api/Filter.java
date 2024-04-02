@@ -22,7 +22,7 @@ public interface Filter {
 
         @Override
         public Object postFilter(RpcRequest request, RpcResponse response, Object result) {
-            return response;
+            return null;
         }
     };
 
