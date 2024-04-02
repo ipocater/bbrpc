@@ -1,5 +1,6 @@
 package com.ipoca.bbrpc.core.registry.zk;
 
+import com.ipoca.bbrpc.core.api.BbrpcException;
 import com.ipoca.bbrpc.core.api.RegistryCenter;
 import com.ipoca.bbrpc.core.meta.InstanceMeta;
 import com.ipoca.bbrpc.core.meta.ServiceMeta;
@@ -63,7 +64,7 @@ public class ZkRegistryCenter implements RegistryCenter {
             client.create().withMode(CreateMode.EPHEMERAL).forPath(instancePath,"provider".getBytes());
             log.info(" ===> register to zk: " + instancePath);
         } catch (Exception ex){
-            throw new RuntimeException();
+            throw new BbrpcException();
         }
     }
 
@@ -80,7 +81,7 @@ public class ZkRegistryCenter implements RegistryCenter {
             log.info(" ===> unregister to zk: " + instancePath);
             client.delete().quietly().forPath(instancePath);
         } catch (Exception ex) {
-            throw new RuntimeException();
+            throw new BbrpcException();
         }
     }
 
@@ -95,7 +96,7 @@ public class ZkRegistryCenter implements RegistryCenter {
 
             return mapInstances(nodes);
         } catch (Exception ex) {
-            throw new RuntimeException();
+            throw new BbrpcException();
         }
     }
 

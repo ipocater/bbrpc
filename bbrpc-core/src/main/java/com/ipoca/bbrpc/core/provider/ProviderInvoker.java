@@ -1,5 +1,6 @@
 package com.ipoca.bbrpc.core.provider;
 
+import com.ipoca.bbrpc.core.api.BbrpcException;
 import com.ipoca.bbrpc.core.api.RpcRequest;
 import com.ipoca.bbrpc.core.api.RpcResponse;
 import com.ipoca.bbrpc.core.meta.ProviderMeta;
@@ -36,9 +37,9 @@ public class ProviderInvoker {
             rpcResponse.setData(result);
             return rpcResponse;
         } catch (InvocationTargetException e) {
-            rpcResponse.setEx(new RuntimeException(e.getTargetException().getMessage()));
+            rpcResponse.setEx(new BbrpcException(e.getTargetException().getMessage()));
         } catch (IllegalAccessException e) {
-            rpcResponse.setEx(new RuntimeException(e.getMessage()));
+            rpcResponse.setEx(new BbrpcException(e.getMessage()));
         }
         return rpcResponse;
     }

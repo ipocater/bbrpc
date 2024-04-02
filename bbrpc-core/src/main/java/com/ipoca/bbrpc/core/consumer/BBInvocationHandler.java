@@ -1,5 +1,6 @@
 package com.ipoca.bbrpc.core.consumer;
 
+import com.ipoca.bbrpc.core.api.BbrpcException;
 import com.ipoca.bbrpc.core.api.Filter;
 import com.ipoca.bbrpc.core.api.RpcContext;
 import com.ipoca.bbrpc.core.api.RpcRequest;
@@ -81,7 +82,12 @@ public class BBInvocationHandler implements InvocationHandler {
             Object data = rpcResponse.getData();
             return TypeUtils.castMethodResult(method, data);
         } else {
-            throw new RuntimeException(rpcResponse.getEx());
+            Exception exception = rpcResponse.getEx();
+            if (exception instanceof BbrpcException ex){
+                throw ex;
+            } else {
+                throw new BbrpcException(rpcResponse.getEx(), BbrpcException.UnknownEx);
+            }
         }
     }
 
