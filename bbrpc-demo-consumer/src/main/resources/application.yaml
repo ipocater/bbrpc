@@ -11,8 +11,9 @@ app:
   namespace: public
   env: dev
   retry: 2
+  timeout: 2000
 
 logging:
   level:
     root: error
-    com.ipoca.bbrpc: info
+    com.ipoca.bbrpc: debug

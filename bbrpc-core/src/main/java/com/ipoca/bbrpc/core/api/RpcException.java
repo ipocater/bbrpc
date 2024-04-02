@@ -3,31 +3,33 @@ package com.ipoca.bbrpc.core.api;
 import lombok.Data;
 
 /**
+ * rpc 统一异常类
+ *
  *@Author：xubang
  *@Date：2024/4/2  0:25
  */
 
 @Data
-public class BbrpcException extends RuntimeException{
+public class RpcException extends RuntimeException{
 
     private String errcode;
 
-    public BbrpcException() {
+    public RpcException() {
     }
 
-    public BbrpcException(String message) {
+    public RpcException(String message) {
         super(message);
     }
 
-    public BbrpcException(String message, Throwable cause) {
+    public RpcException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public BbrpcException(Throwable cause) {
+    public RpcException(Throwable cause) {
         super(cause);
     }
 
-    public BbrpcException(Throwable cause, String errcode) {
+    public RpcException(Throwable cause, String errcode) {
         super(cause);
         this.errcode = errcode;
     }

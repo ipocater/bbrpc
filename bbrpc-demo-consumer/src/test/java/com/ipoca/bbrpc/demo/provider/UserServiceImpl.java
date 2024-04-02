@@ -77,5 +77,18 @@ public class UserServiceImpl implements UserService {
         return new User(100, "BB100");
     }
 
+    @Override
+    public User find(int timeout) {
+        String prot = environment.getProperty("server.port");
+        if ("8081".equals(prot)) {
+            try {
+                Thread.sleep(timeout);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return new User(100, "BB100");
+    }
+
 
 }

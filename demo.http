@@ -1,6 +1,9 @@
 ### 获取8088用户信息
 GET http://localhost:8088/?id=101
 
+### 获取超时信息
+GET http://localhost:8088/find/?timeout=5100
+
 
 ### 获取用户信息
 POST http://localhost:8088/
