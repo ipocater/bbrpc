@@ -1,10 +1,15 @@
 package com.ipoca.bbrpc.core.meta;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
 import java.util.Map;
+
+
 
 /**
  * 描述服务元数据
@@ -23,7 +28,7 @@ public class InstanceMeta {
     private String context; // dubbo url?k1=v1
 
     private boolean status;// online or offline
-    private Map<String, String> parameter; // idc A B C
+    private Map<String, String> parameter = new HashMap<>(); // idc A B C
 
     public InstanceMeta(String schema, String host, Integer port, String context) {
         this.schema = schema;
@@ -49,5 +54,9 @@ public class InstanceMeta {
     public String toUrl() {
         return String.format("%s://%s:%d/%s",schema, host, port,context);
 
+    }
+
+    public String toMetas() {
+        return JSON.toJSONString(this.getParameter());
     }
 }
