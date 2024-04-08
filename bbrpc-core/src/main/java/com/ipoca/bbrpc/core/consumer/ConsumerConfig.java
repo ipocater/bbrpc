@@ -8,6 +8,7 @@ import com.ipoca.bbrpc.core.api.Filter;
 import com.ipoca.bbrpc.core.api.LoadBalancer;
 import com.ipoca.bbrpc.core.api.RegistryCenter;
 import com.ipoca.bbrpc.core.api.Router;
+import com.ipoca.bbrpc.core.cluster.GrayRouter;
 import com.ipoca.bbrpc.core.cluster.RoundRibonLoadBalancer;
 import com.ipoca.bbrpc.core.filter.CacheFilter;
 import com.ipoca.bbrpc.core.filter.MockFilter;
@@ -26,6 +27,9 @@ import org.springframework.core.annotation.Order;
 public class ConsumerConfig {
     @Value("${bbrpc.providers}")
     String servers;
+
+    @Value("${app.grayRatio}")
+    private int grayRatio;
 
     @Bean
     ConsumerBootstrap createConsumerBootstrap() {
@@ -50,7 +54,7 @@ public class ConsumerConfig {
 
     @Bean
     public Router<InstanceMeta> router(){
-        return Router.Default;
+        return new GrayRouter(grayRatio);
     }
 
     @Bean
