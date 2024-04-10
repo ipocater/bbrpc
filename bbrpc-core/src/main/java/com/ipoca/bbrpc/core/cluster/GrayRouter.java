@@ -3,6 +3,8 @@ package com.ipoca.bbrpc.core.cluster;
 import com.ipoca.bbrpc.core.api.Router;
 import com.ipoca.bbrpc.core.meta.InstanceMeta;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -17,10 +19,11 @@ import java.util.Random;
  */
 
 @Slf4j
-@Data
 public class GrayRouter implements Router<InstanceMeta> {
 
-    private int grayRatio;
+    @Setter
+    @Getter
+    private int grayRatio = -1;
 
     private final Random random = new Random();
 

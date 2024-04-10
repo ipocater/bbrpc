@@ -1,6 +1,7 @@
 package com.ipoca.bbrpc.demo.api;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
 
@@ -32,4 +33,14 @@ public interface UserService {
     User find(int timeout);
 
     void setTimeoutPorts(String timeoutPorts);
+
+    List<User> getList(List<User> users);
+
+    Map<String, User> getMap(Map<String, User> map);
+
+    Boolean getFlag(boolean b);
+
+    User[] findUsers(User[] users);
+
+    User findById(long l);
 }

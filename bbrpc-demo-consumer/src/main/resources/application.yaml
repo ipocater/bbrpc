@@ -11,8 +11,8 @@ app:
   namespace: public
   env: dev
   retry: 2
-  timeout: 1000
-  grayRatio: 10 # 0-100
+  timeout: 10000
+  grayRatio: -1 # 0-100
 
 logging:
   level:
