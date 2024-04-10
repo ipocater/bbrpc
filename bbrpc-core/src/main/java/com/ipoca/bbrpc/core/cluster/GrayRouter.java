@@ -2,6 +2,8 @@ package com.ipoca.bbrpc.core.cluster;
 
 import com.ipoca.bbrpc.core.api.Router;
 import com.ipoca.bbrpc.core.meta.InstanceMeta;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +15,12 @@ import java.util.Random;
  *@Author：xubang
  *@Date：2024/4/9  0:06
  */
-    
+
+@Slf4j
+@Data
 public class GrayRouter implements Router<InstanceMeta> {
 
-    private final int grayRatio;
+    private int grayRatio;
 
     private final Random random = new Random();
 
@@ -42,6 +46,9 @@ public class GrayRouter implements Router<InstanceMeta> {
             }
         });
 
+        log.debug(" grayRouter grayNodes/nornalNodes,grayRatio ===> {}/{}, {}",
+                grayNodes.size(),normalNodes.size(),grayRatio);
+
         if (normalNodes.isEmpty() || grayNodes.isEmpty()) return providers;
         if (grayRatio <=0 ){
             return normalNodes;
@@ -50,8 +57,10 @@ public class GrayRouter implements Router<InstanceMeta> {
         }
 
         if (random.nextInt(100) < grayRatio){
+            log.debug(" grayRouter grayNodes ===> {}", grayNodes);
             return grayNodes;
         } else {
+            log.debug(" grayRouter normalNodes ===> {}", normalNodes);
             return normalNodes;
         }
     }

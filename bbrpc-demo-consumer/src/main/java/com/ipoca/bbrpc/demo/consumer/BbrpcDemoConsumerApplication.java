@@ -1,10 +1,13 @@
 package com.ipoca.bbrpc.demo.consumer;
 
 import com.ipoca.bbrpc.core.annotation.BBConsumer;
+import com.ipoca.bbrpc.core.api.Router;
+import com.ipoca.bbrpc.core.cluster.GrayRouter;
 import com.ipoca.bbrpc.core.consumer.ConsumerConfig;
 import com.ipoca.bbrpc.demo.api.OrderService;
 import com.ipoca.bbrpc.demo.api.User;
 import com.ipoca.bbrpc.demo.api.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -34,6 +37,15 @@ public class BbrpcDemoConsumerApplication {
     @RequestMapping("/find/")
     public User find(@RequestParam("timeout") int timeout){
         return userService.find(timeout);
+    }
+
+    @Autowired
+    Router router;
+
+    @RequestMapping("/gray/")
+    public String gray(@RequestParam("ratio") int ratio){
+        ((GrayRouter)router).setGrayRatio(ratio);
+        return "OK-new gray ratio is " + ratio;
     }
 
     public static void main(String[] args) {
