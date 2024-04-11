@@ -2,11 +2,13 @@ package com.ipoca.bbrpc.core.provider;
 
 import com.ipoca.bbrpc.core.api.RegistryCenter;
 import com.ipoca.bbrpc.core.registry.zk.ZkRegistryCenter;
+import com.ipoca.bbrpc.core.transport.SpringBootTransport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
 
 /**
@@ -16,6 +18,7 @@ import org.springframework.core.annotation.Order;
 
 @Configuration
 @Slf4j
+@Import({SpringBootTransport.class})
 public class ProviderConfig {
 
     @Bean
