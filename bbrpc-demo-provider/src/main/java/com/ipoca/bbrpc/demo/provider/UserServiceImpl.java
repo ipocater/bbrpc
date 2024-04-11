@@ -1,6 +1,7 @@
 package com.ipoca.bbrpc.demo.provider;
 
 import com.ipoca.bbrpc.core.annotation.BBProvider;
+import com.ipoca.bbrpc.core.api.RpcContext;
 import com.ipoca.bbrpc.demo.api.User;
 import com.ipoca.bbrpc.demo.api.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,5 +132,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(long id) {
         return new User(Long.valueOf(id).intValue(), "KK");
+    }
+
+    @Override
+    public String echoParameter(String key) {
+        System.out.println(" ====>> RpcContext.ContextParameters: ");
+        RpcContext.ContextParameters.get().forEach((k, v)-> System.out.println(k+" -> " +v));
+        return RpcContext.getContextParameter(key);
     }
 }

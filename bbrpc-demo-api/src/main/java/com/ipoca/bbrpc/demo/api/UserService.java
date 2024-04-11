@@ -43,4 +43,6 @@ public interface UserService {
     User[] findUsers(User[] users);
 
     User findById(long l);
+
+    String echoParameter(String key);
 }

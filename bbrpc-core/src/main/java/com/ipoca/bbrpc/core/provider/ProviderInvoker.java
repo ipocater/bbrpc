@@ -30,9 +30,9 @@ public class ProviderInvoker {
 
     public RpcResponse<Object> invoke(RpcRequest request) {
         log.debug(" ===> ProviderInvoker.invoke(request:{})", request);
-//        if (!request.getParams().isEmpty()){
-//            request.getParams().forEach(RpcContext::setC);
-//        }
+        if (!request.getParams().isEmpty()){
+            request.getParams().forEach(RpcContext::setContextParameter);
+        }
         RpcResponse<Object> rpcResponse = new RpcResponse();
         List<ProviderMeta> providerMetas = skeleton.get(request.getService());
         try {
