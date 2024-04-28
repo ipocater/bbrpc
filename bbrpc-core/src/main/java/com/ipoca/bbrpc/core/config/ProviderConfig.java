@@ -1,10 +1,13 @@
-package com.ipoca.bbrpc.core.provider;
+package com.ipoca.bbrpc.core.config;
 
 import com.ipoca.bbrpc.core.api.RegistryCenter;
+import com.ipoca.bbrpc.core.provider.ProviderBootstrap;
+import com.ipoca.bbrpc.core.provider.ProviderInvoker;
 import com.ipoca.bbrpc.core.registry.zk.ZkRegistryCenter;
 import com.ipoca.bbrpc.core.transport.SpringBootTransport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,12 +21,21 @@ import org.springframework.core.annotation.Order;
 
 @Configuration
 @Slf4j
-@Import({SpringBootTransport.class})
+@Import({AppConfigProperties.class, ProviderConfig.class,SpringBootTransport.class})
 public class ProviderConfig {
+
+    @Value("${server.port:8080}")
+    private String port;
+
+    @Autowired
+    AppConfigProperties appConfigProperties;
+
+    @Autowired
+    ProviderConfigProperties providerConfigProperties;
 
     @Bean
     ProviderBootstrap providerBootstrap(){
-        return new ProviderBootstrap();
+        return new ProviderBootstrap(port, appConfigProperties, providerConfigProperties);
     }
 
     @Bean

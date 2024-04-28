@@ -2,9 +2,7 @@ package com.ipoca.bbrpc.demo.provider;
 
 import com.ipoca.bbrpc.core.api.RpcRequest;
 import com.ipoca.bbrpc.core.api.RpcResponse;
-import com.ipoca.bbrpc.core.provider.ProviderBootstrap;
-import com.ipoca.bbrpc.core.provider.ProviderConfig;
-import com.ipoca.bbrpc.core.provider.ProviderInvoker;
+import com.ipoca.bbrpc.core.config.ProviderConfig;
 import com.ipoca.bbrpc.core.transport.SpringBootTransport;
 import com.ipoca.bbrpc.demo.api.User;
 import com.ipoca.bbrpc.demo.api.UserService;
@@ -14,7 +12,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

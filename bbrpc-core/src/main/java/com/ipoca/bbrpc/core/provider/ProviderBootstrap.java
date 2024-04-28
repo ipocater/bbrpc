@@ -2,6 +2,8 @@ package com.ipoca.bbrpc.core.provider;
 
 import com.ipoca.bbrpc.core.annotation.BBProvider;
 import com.ipoca.bbrpc.core.api.RegistryCenter;
+import com.ipoca.bbrpc.core.config.AppConfigProperties;
+import com.ipoca.bbrpc.core.config.ProviderConfigProperties;
 import com.ipoca.bbrpc.core.meta.InstanceMeta;
 import com.ipoca.bbrpc.core.meta.ProviderMeta;
 import com.ipoca.bbrpc.core.meta.ServiceMeta;
@@ -29,26 +31,21 @@ import java.util.Map;
 @Data
 @Slf4j
 public class ProviderBootstrap implements ApplicationContextAware {
+
     ApplicationContext applicationContext;
     RegistryCenter rc;
-
+    private String port;
+    private AppConfigProperties appProperties;
+    private ProviderConfigProperties providerProperties;
     private MultiValueMap<String, ProviderMeta> skeleton = new LinkedMultiValueMap<>();
     private InstanceMeta instance;
 
-    @Value("${server.port}")
-    private String port;
-
-    @Value("${app.id}")
-    private String app;
-
-    @Value("${app.namespace}")
-    private String namespace;
-
-    @Value("${app.env}")
-    private String env;
-
-    @Value("#{${app.metas}}")
-    Map<String, String> metas;
+    public ProviderBootstrap(String port, AppConfigProperties appProperties,
+                             ProviderConfigProperties providerProperties){
+        this.port = port;
+        this.appProperties = appProperties;
+        this.providerProperties = providerProperties;
+    }
 
     @PostConstruct // init-method
     public void init() {
@@ -61,7 +58,7 @@ public class ProviderBootstrap implements ApplicationContextAware {
     public void start(){
         String ip = InetAddress.getLocalHost().getHostAddress();
         instance = InstanceMeta.http(ip, Integer.valueOf(port));
-        instance.getParameter().putAll(this.metas);
+        instance.getParameter().putAll(providerProperties.getMetas());
         rc.start();
         skeleton.keySet().forEach(this::registerService);
     }
@@ -73,12 +70,22 @@ public class ProviderBootstrap implements ApplicationContextAware {
     }
 
     private void registerService(String service) {
-        ServiceMeta serviceMeta = ServiceMeta.builder().app(app).env(env).namespace(namespace).name(service).build();
+        ServiceMeta serviceMeta = ServiceMeta.builder()
+                .app(appProperties.getId())
+                .env(appProperties.getEnv())
+                .namespace(appProperties.getNamespace())
+                .name(service)
+                .build();
         rc.register(serviceMeta, instance);
     }
 
     private void unregisterService(String service) {
-        ServiceMeta serviceMeta = ServiceMeta.builder().app(app).env(env).namespace(namespace).name(service).build();
+        ServiceMeta serviceMeta = ServiceMeta.builder()
+                .app(appProperties.getId())
+                .env(appProperties.getEnv())
+                .namespace(appProperties.getNamespace())
+                .name(service)
+                .build();
         rc.unregister(serviceMeta, instance);
     }
 

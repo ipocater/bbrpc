@@ -168,12 +168,12 @@ public class BBInvocationHandler implements InvocationHandler {
             Object data = rpcResponse.getData();
             return TypeUtils.castMethodResult(method, data);
         } else {
-            Exception exception = rpcResponse.getEx();
-            if (exception instanceof RpcException ex){
-                throw ex;
-            } else {
-                throw new RpcException(rpcResponse.getEx(), RpcException.UnknownEx);
+            RpcException exception = rpcResponse.getEx();
+            if (exception != null){
+                log.error("response error.", exception);
+                throw exception;
             }
+            return null;
         }
     }
 

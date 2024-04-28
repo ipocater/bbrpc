@@ -4,7 +4,7 @@ import com.ipoca.bbrpc.core.annotation.BBConsumer;
 import com.ipoca.bbrpc.core.api.Router;
 import com.ipoca.bbrpc.core.api.RpcContext;
 import com.ipoca.bbrpc.core.cluster.GrayRouter;
-import com.ipoca.bbrpc.core.consumer.ConsumerConfig;
+import com.ipoca.bbrpc.core.config.ConsumerConfig;
 import com.ipoca.bbrpc.demo.api.OrderService;
 import com.ipoca.bbrpc.demo.api.User;
 import com.ipoca.bbrpc.demo.api.UserService;

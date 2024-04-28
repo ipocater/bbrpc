@@ -2,7 +2,7 @@ package com.ipoca.bbrpc.demo.provider;
 
 import com.ipoca.bbrpc.core.api.RpcRequest;
 import com.ipoca.bbrpc.core.api.RpcResponse;
-import com.ipoca.bbrpc.core.provider.ProviderConfig;
+import com.ipoca.bbrpc.core.config.ProviderConfig;
 import com.ipoca.bbrpc.core.provider.ProviderInvoker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
