@@ -5,10 +5,10 @@
     <parent>
         <groupId>com.ipoca</groupId>
         <artifactId>bbrpc</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${bbrpc.version}</version>
     </parent>
     <artifactId>bbrpc-core</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${bbrpc.version}</version>
     <name>bbrpc-core</name>
     <description>bbrpc-core</description>
 

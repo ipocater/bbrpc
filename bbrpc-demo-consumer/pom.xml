@@ -5,10 +5,10 @@
     <parent>
         <groupId>com.ipoca</groupId>
         <artifactId>bbrpc</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${bbrpc.version}</version>
     </parent>
     <artifactId>bbrpc-demo-consumer</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${bbrpc.version}</version>
     <name>bbrpc-demo-consumer</name>
     <description>bbrpc-demo-consumer</description>
 
@@ -43,12 +43,18 @@
         <dependency>
             <groupId>com.ipoca</groupId>
             <artifactId>bbrpc-demo-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${bbrpc.version}</version>
         </dependency>
         <dependency>
             <groupId>com.ipoca</groupId>
             <artifactId>bbrpc-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${bbrpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ipoca</groupId>
+            <artifactId>bbrpc-demo-provider</artifactId>
+            <version>${bbrpc.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

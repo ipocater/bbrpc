@@ -5,10 +5,10 @@
     <parent>
         <groupId>com.ipoca</groupId>
         <artifactId>bbrpc</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${bbrpc.version}</version>
     </parent>
     <artifactId>bbrpc-demo-provider</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${bbrpc.version}</version>
     <name>bbrpc-demo-provider</name>
     <description>bbrpc-demo-provider</description>
 
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>com.ipoca</groupId>
             <artifactId>bbrpc-demo-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${bbrpc.version}</version>
         </dependency>
 
 
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>com.ipoca</groupId>
             <artifactId>bbrpc-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${bbrpc.version}</version>
         </dependency>
     </dependencies>
 
@@ -62,6 +62,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <classifier>boot</classifier>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
