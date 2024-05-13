@@ -1,5 +1,6 @@
 package com.ipoca.bbrpc.demo.provider;
 
+import com.ipoca.bbrpc.core.api.RpcException;
 import com.ipoca.bbrpc.core.api.RpcRequest;
 import com.ipoca.bbrpc.core.api.RpcResponse;
 import com.ipoca.bbrpc.core.config.ProviderConfig;
@@ -98,5 +99,19 @@ public class BbrpcDemoProviderApplication {
         request4.setArgs(new Object[]{ userMap });
         RpcResponse<Object> rpcResponse4 = transport.invoke(request4);
         System.out.println("return : "+rpcResponse4.getData());
+
+        System.out.println("Provider Case 5. >>===[复杂测试：测试流量并发控制]===");
+        for (int i = 0; i < 120; i++) {
+            try {
+                Thread.sleep(1000);
+                RpcResponse<Object> r = transport.invoke(request);
+                System.out.println(i + " ***>>> " +r.getData());
+            } catch (RpcException e) {
+                // ignore
+                System.out.println(i + " ***>>> " +e.getMessage() + " -> " + e.getErrcode());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

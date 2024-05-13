@@ -1,14 +1,21 @@
 server:
   port: 8084
 
-app:
-  id: app1
-  namespace: public
-  env: dev
+
 
 bbrpc:
-  zkServer: localhost:2182
-  zkRoot: bbrpc
+  zk:
+    server: localhost:2182
+    root: bbrpc
+  app:
+    id: app1
+    namespace: public
+    env: dev
+  provider:
+    metas:
+      dc: bj
+      gray: false
+      unit: B002
 
 logging:
   level:

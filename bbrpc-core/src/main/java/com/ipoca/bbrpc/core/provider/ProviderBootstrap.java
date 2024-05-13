@@ -47,24 +47,23 @@ public class ProviderBootstrap implements ApplicationContextAware {
         this.providerProperties = providerProperties;
     }
 
+    @SneakyThrows
     @PostConstruct // init-method
     public void init() {
         Map<String, Object> providers = applicationContext.getBeansWithAnnotation(BBProvider.class);
         rc  = applicationContext.getBean(RegistryCenter.class);
-        providers.forEach((x,y) -> log.info(x));
+        providers.keySet().forEach(System.out::println);
         providers.values().forEach(this::genInterface);
     }
     @SneakyThrows
     public void start(){
         String ip = InetAddress.getLocalHost().getHostAddress();
-        instance = InstanceMeta.http(ip, Integer.valueOf(port));
-        instance.getParameter().putAll(providerProperties.getMetas());
+        instance = InstanceMeta.http(ip, Integer.valueOf(port)).addParams(providerProperties.getMetas());
         rc.start();
         skeleton.keySet().forEach(this::registerService);
     }
     @PreDestroy
     public void stop(){
-        log.info(" ===> unreg all services.");
         skeleton.keySet().forEach(this::unregisterService);
         rc.stop();
     }
