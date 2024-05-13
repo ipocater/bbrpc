@@ -4,6 +4,7 @@ import com.ipoca.bbrpc.core.api.RpcContext;
 import com.ipoca.bbrpc.core.api.RpcException;
 import com.ipoca.bbrpc.core.api.RpcRequest;
 import com.ipoca.bbrpc.core.api.RpcResponse;
+import com.ipoca.bbrpc.core.governance.SlidingTimeWindow;
 import com.ipoca.bbrpc.core.meta.ProviderMeta;
 import com.ipoca.bbrpc.core.util.TypeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,9 @@ import org.springframework.util.MultiValueMap;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -24,8 +27,16 @@ public class ProviderInvoker {
 
     private MultiValueMap<String, ProviderMeta> skeleton;
 
+    private final int trafficControl; // = 20;
+
+    final Map<String, SlidingTimeWindow> windows = new HashMap<>();
+
+    final Map<String, String> metas;
+
     public ProviderInvoker(ProviderBootstrap providerBootstrap) {
         this.skeleton = providerBootstrap.getSkeleton();
+        this.metas = providerBootstrap.getProviderProperties().getMetas();
+        this.trafficControl = Integer.parseInt(metas.getOrDefault("tc", "20"));
     }
 
     public RpcResponse<Object> invoke(RpcRequest request) {
@@ -34,6 +45,20 @@ public class ProviderInvoker {
             request.getParams().forEach(RpcContext::setContextParameter);
         }
         RpcResponse<Object> rpcResponse = new RpcResponse();
+        //限流控制
+        String service =request.getService();
+        synchronized (windows) {
+            SlidingTimeWindow window = windows.computeIfAbsent(service, k -> new SlidingTimeWindow());
+            if (window.calcSum() >= trafficControl){
+                System.out.println(window);
+                throw new RpcException("service " + service + " invoked in 30s/[" +
+                        window.getSum() + "] larger than tpsLimit = " + trafficControl, RpcException.ExceedLimitEx);
+            }
+
+            window.record(System.currentTimeMillis());
+            log.debug("service {} in window with {}", service, window.getSum());
+        }
+
         List<ProviderMeta> providerMetas = skeleton.get(request.getService());
         try {
             ProviderMeta meta = findProviderMeta(providerMetas,request.getMethodSign());
