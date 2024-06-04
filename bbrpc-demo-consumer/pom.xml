@@ -41,17 +41,17 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.ipoca</groupId>
+            <groupId>io.github.ipocater</groupId>
             <artifactId>bbrpc-demo-api</artifactId>
             <version>${bbrpc.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.ipoca</groupId>
+            <groupId>io.github.ipocater</groupId>
             <artifactId>bbrpc-core</artifactId>
             <version>${bbrpc.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.ipoca</groupId>
+            <groupId>io.github.ipocater</groupId>
             <artifactId>bbrpc-demo-provider</artifactId>
             <version>${bbrpc.version}</version>
             <scope>test</scope>

@@ -20,3 +20,16 @@ logging:
   level:
     root: error
     com.ipoca.bbrpc: info
+
+app:
+  id: app1
+apollo:
+  cacheDir: /opt/data/
+  cluster: default
+  meta: http://kimmking.cm:8070
+  autoUpdateInjectedSpringProperties: true
+  bootstrap:
+    enabled: true
+    namespaces: ipoca
+    eagerLoad:
+      enabled: false

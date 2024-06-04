@@ -4,6 +4,7 @@ import com.ipoca.bbrpc.core.api.RpcContext;
 import com.ipoca.bbrpc.core.api.RpcException;
 import com.ipoca.bbrpc.core.api.RpcRequest;
 import com.ipoca.bbrpc.core.api.RpcResponse;
+import com.ipoca.bbrpc.core.config.ProviderProperties;
 import com.ipoca.bbrpc.core.governance.SlidingTimeWindow;
 import com.ipoca.bbrpc.core.meta.ProviderMeta;
 import com.ipoca.bbrpc.core.util.TypeUtils;
@@ -27,16 +28,13 @@ public class ProviderInvoker {
 
     private MultiValueMap<String, ProviderMeta> skeleton;
 
-    private final int trafficControl; // = 20;
-
     final Map<String, SlidingTimeWindow> windows = new HashMap<>();
 
-    final Map<String, String> metas;
+    final ProviderProperties providerProperties;
 
     public ProviderInvoker(ProviderBootstrap providerBootstrap) {
         this.skeleton = providerBootstrap.getSkeleton();
-        this.metas = providerBootstrap.getProviderProperties().getMetas();
-        this.trafficControl = Integer.parseInt(metas.getOrDefault("tc", "20"));
+        this.providerProperties = providerBootstrap.getProviderProperties();
     }
 
     public RpcResponse<Object> invoke(RpcRequest request) {
@@ -49,6 +47,7 @@ public class ProviderInvoker {
         String service =request.getService();
         synchronized (windows) {
             SlidingTimeWindow window = windows.computeIfAbsent(service, k -> new SlidingTimeWindow());
+            int trafficControl = Integer.parseInt(providerProperties.getMetas().getOrDefault("tc", "20"));
             if (window.calcSum() >= trafficControl){
                 System.out.println(window);
                 throw new RpcException("service " + service + " invoked in 30s/[" +

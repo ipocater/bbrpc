@@ -15,7 +15,7 @@ import java.util.Map;
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "bbrpc.provider")
-public class ProviderConfigProperties {
+public class ProviderProperties {
 
     Map<String, String> metas = new HashMap<>();
 }

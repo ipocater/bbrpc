@@ -3,7 +3,7 @@ package com.ipoca.bbrpc.core.provider;
 import com.ipoca.bbrpc.core.annotation.BBProvider;
 import com.ipoca.bbrpc.core.api.RegistryCenter;
 import com.ipoca.bbrpc.core.config.AppConfigProperties;
-import com.ipoca.bbrpc.core.config.ProviderConfigProperties;
+import com.ipoca.bbrpc.core.config.ProviderProperties;
 import com.ipoca.bbrpc.core.meta.InstanceMeta;
 import com.ipoca.bbrpc.core.meta.ProviderMeta;
 import com.ipoca.bbrpc.core.meta.ServiceMeta;
@@ -13,7 +13,6 @@ import jakarta.annotation.PreDestroy;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.LinkedMultiValueMap;
@@ -36,12 +35,12 @@ public class ProviderBootstrap implements ApplicationContextAware {
     RegistryCenter rc;
     private String port;
     private AppConfigProperties appProperties;
-    private ProviderConfigProperties providerProperties;
+    private ProviderProperties providerProperties;
     private MultiValueMap<String, ProviderMeta> skeleton = new LinkedMultiValueMap<>();
     private InstanceMeta instance;
 
     public ProviderBootstrap(String port, AppConfigProperties appProperties,
-                             ProviderConfigProperties providerProperties){
+                             ProviderProperties providerProperties){
         this.port = port;
         this.appProperties = appProperties;
         this.providerProperties = providerProperties;

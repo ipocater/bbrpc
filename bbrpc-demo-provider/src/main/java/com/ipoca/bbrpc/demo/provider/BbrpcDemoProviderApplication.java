@@ -3,6 +3,7 @@ package com.ipoca.bbrpc.demo.provider;
 import com.ipoca.bbrpc.core.api.RpcException;
 import com.ipoca.bbrpc.core.api.RpcRequest;
 import com.ipoca.bbrpc.core.api.RpcResponse;
+import com.ipoca.bbrpc.core.config.ApolloChangedListener;
 import com.ipoca.bbrpc.core.config.ProviderConfig;
 import com.ipoca.bbrpc.core.transport.SpringBootTransport;
 import com.ipoca.bbrpc.demo.api.User;
@@ -26,6 +27,12 @@ import java.util.Map;
 @RestController
 @Import({ProviderConfig.class})
 public class BbrpcDemoProviderApplication {
+
+    @Bean
+    ApolloChangedListener apolloChangedListener() {
+        return new ApolloChangedListener();
+    }
+
 
     public static void main(String[] args) {
         SpringApplication.run(BbrpcDemoProviderApplication.class, args);

@@ -22,7 +22,7 @@ import org.springframework.core.annotation.Order;
 
 @Configuration
 @Slf4j
-@Import({AppConfigProperties.class, ProviderConfigProperties.class,SpringBootTransport.class})
+@Import({AppConfigProperties.class, ProviderProperties.class,SpringBootTransport.class})
 public class ProviderConfig {
 
     @Value("${server.port:8080}")
@@ -32,7 +32,7 @@ public class ProviderConfig {
     AppConfigProperties appConfigProperties;
 
     @Autowired
-    ProviderConfigProperties providerConfigProperties;
+    ProviderProperties providerConfigProperties;
 
     @Bean
     ProviderBootstrap providerBootstrap(){
